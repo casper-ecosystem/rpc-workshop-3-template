@@ -1,0 +1,15 @@
+[package]
+name = "tictactoe"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+casper-contract = "1.4.3"
+casper-types = "1.4.6"
+
+[[bin]]
+name = "tictactoe"
+path = "src/tictactoe.rs"
+bench = false
+doctest = false
+test = false

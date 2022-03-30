@@ -1,0 +1,7 @@
+__pycache__/
+venv/
+guestkeys/
+hostkeys/
+interaction.py
+tictactoe_compiled/
+.DS_Store
