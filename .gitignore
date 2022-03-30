@@ -1,6 +1,7 @@
 __pycache__/
 venv/
 guestkeys/
+guestkeysold/
 hostkeys/
 interaction.py
 tictactoe_compiled/
