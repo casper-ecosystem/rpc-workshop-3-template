@@ -18,7 +18,7 @@ class LocalClient:
     def __init__(self, isHost, opponentPublicKeyHex):
         self.isHost = isHost
         self.opponentPublicKeyHex = opponentPublicKeyHex
-        self.client = NodeClient(NodeConnection(host = "3.208.91.63", port_rpc = 7777))
+        self.client = NodeClient(NodeConnection(host = "95.216.67.162", port_rpc = 7777))
         self.privateKey, self.publicKey = self.getKeys() if isHost else self.getGuestKeys()
         self.contractHash = self.getContractHash("tictactoe_contract")
         self.deployFailed = None
@@ -39,16 +39,22 @@ class LocalClient:
     def setGameState(self):
         try:
             dictState = self.getDictionaryGameState()
+            if self.verbose: print("dictState" + dictState)
             if dictState == None:
                 self.gameState = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+                if self.verbose: print("Game state blank")
                 return
             stateIntStr = str(dictState)
             state = [int(stateIntStr[i: i + 2]) for i in range(0, len(stateIntStr), 2)]
             self.gameState = state
+            if self.verbose: print("Game state set")
         except pycspr.api.connection.NodeAPIError as error:
             if "-32003" in str(error):
                 self.gameState = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+                if self.verbose: print("API Error game state blank")
             else:
+                if self.verbose: print("Unknown API Error")
+                exit(1)
                 return None
 
     #-------
