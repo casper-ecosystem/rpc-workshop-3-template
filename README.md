@@ -35,6 +35,14 @@ casper-client put-deploy \
     --session-path tictactoe_event/target/wasm32-unknown-unknown/release/tictactoe.wasm
 ```
 
+## Implement Methods
+#### `localclient.py`
+* `startEventListener(LocalClient)`
+    * Should call `get_events(callback, NodeEventChannel)` on a NodeClient instance.
+* `eventReceived(LocalClient, NodeEventInfo)`
+    * Should parse `NodeEventInfo` object and react appropriately.
+*Note: See the methods with working functionality [here](https://github.com/casper-ecosystem/rpc-workshop-3/blob/main/localclient.py#L148)*
+
 ## Play
 Play as either the host or guest:
 ```bash
