@@ -36,12 +36,19 @@ casper-client put-deploy \
 ```
 
 ## Implement Methods
-#### `localclient.py`
+#### *localclient.py*
 * `startEventListener(LocalClient)`
     * Should call `get_events(callback, NodeEventChannel)` on a NodeClient instance.
 * `eventReceived(LocalClient, NodeEventInfo)`
     * Should parse `NodeEventInfo` object and react appropriately.
 *Note: See the methods with working functionality [here](https://github.com/casper-ecosystem/rpc-workshop-3/blob/main/localclient.py#L148)*
+#### *game.py*
+* `_main()`
+    * The main entry point of the game. Where the control flow of the game is executed.
+* `pollForOurTurn(LocalClient)`
+    * Continually checks the game state to wait for the turn of the player, considering their `isHost` value.
+* `pollForOpponentsTurn(LocalClient)`
+    * Polls for the completion of our turn. When complete, should return `True` when it is the opponent's turn. Should return `False` if our `LocalClient().deployFailed` is `True`.
 
 ## Play
 Play as either the host or guest:
