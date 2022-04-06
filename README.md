@@ -49,6 +49,7 @@ casper-client put-deploy \
     * Continually checks the game state to wait for the turn of the player, considering their `isHost` value.
 * `pollForOpponentsTurn(LocalClient)`
     * Polls for the completion of our turn. When complete, should return `True` when it is the opponent's turn. Should return `False` if our `LocalClient().deployFailed` is `True`.
+* *Note: See the methods with working functionality [here](https://github.com/casper-ecosystem/rpc-workshop-3/blob/main/game.py#L9)*
 
 ## Play
 Play as either the host or guest:
