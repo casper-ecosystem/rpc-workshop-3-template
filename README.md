@@ -28,7 +28,7 @@ make build-contract
 ```bash
 cd ~/rpc-workshop-3-template
 casper-client put-deploy \
-    --node-address http://3.208.91.63:7777/rpc \
+    --node-address http://95.216.67.162:7777/rpc \
     --chain-name casper-test \
     --secret-key hostkeys/secret_key.pem \
     --payment-amount 50000000000 \
