@@ -51,24 +51,6 @@ class LocalClient:
             else:
                 return None
 
-    def reset(self):
-        if not self.isHost:
-            print("Only the host can reset the board")
-            return
-        params: DeployParameters = pycspr.create_deploy_parameters(account = self.privateKey, chain_name = "casper-test")
-        payment: ModuleBytes = pycspr.create_standard_payment(int(3e9))
-
-        session = types.StoredContractByHash(
-            entry_point="reset",
-            hash = bytes.fromhex(self.contractHash),
-            args = {
-                "guest": types.CL_ByteArray(self.publicKeyFromHex(self.opponentPublicKeyHex).account_hash)
-            }
-        )
-
-        deploy: Deploy = pycspr.create_deploy(params, payment, session)
-        return deploy
-
     #-------
     #GETTERS
     #-------
@@ -145,54 +127,6 @@ class LocalClient:
     #EVENTS
     #------
 
-    def startEventListener(self):
-        self.client.get_events(self.eventReceived, pycspr.NodeEventChannel.main)
+    # startEventListener()
 
-    def eventReceived(self, event):
-        if (event.typeof.name != "DeployProcessed" or event.channel.name != "main" or "DeployProcessed" not in event.payload):
-            if self.verbose: print("Event found but not DeployProcessed")
-            return #Leave as we only care about "DeployProcessed Events" on the main channel
-        if (event.payload["DeployProcessed"]["account"].lower() != self.publicKey.account_key.hex().lower() and event.payload["DeployProcessed"]["account"].lower() != self.opponentPublicKeyHex.lower()):
-            if self.verbose: print("DeployProcessed Event found but it's not from the host or guest")
-            return #Leave if the deployer was not the host or the guest
-        if ("execution_result" not in event.payload["DeployProcessed"]):
-            if self.verbose: print("Execution results not found in DeployProcessed (From host or guest)")
-            return #Leave if execution result is empty
-        if ("Failure" in event.payload["DeployProcessed"]["execution_result"]):
-            if event.payload["DeployProcessed"]["account"].lower() == self.publicKey.account_key.hex().lower() and self.mostRecentDeployHash and self.mostRecentDeployHash.lower() == event.payload["DeployProcessed"]["deploy_hash"].lower(): #If this is our deploy, and it failed
-                self.deployFailed = True
-            return
-        if ("Success" not in event.payload["DeployProcessed"]["execution_result"] or "effect" not in event.payload["DeployProcessed"]["execution_result"]["Success"] or "transforms" not in event.payload["DeployProcessed"]["execution_result"]["Success"]["effect"]):
-            if self.verbose: print("Deploy JSON not valid")
-            return
-        transforms = [kt["transform"] for kt in event.payload["DeployProcessed"]["execution_result"]["Success"]["effect"]["transforms"] if kt["key"][:4] == "uref"]
-
-        for transform in transforms:
-            if "WriteCLValue" in transform and "parsed" in transform["WriteCLValue"]: #Check so we don't throw an error
-                if self.verbose: print(transform)
-                hostScore = "0"
-                guestScore = "0"
-                victor = None
-                for kv in transform["WriteCLValue"]["parsed"]: #Multiple entries, just need the event type
-                    if kv["key"] == "event_type":
-                        if kv["value"] == "HostMove" or kv["value"] == "GuestMove" or kv["value"] == "GameStart":
-                            if self.verbose: print("Game state set")
-                            self.setGameState()
-                        elif kv["value"] == "Draw":
-                            victor = "draw"
-                        elif kv["value"] == "HostVictory":
-                            victor = "host"
-                        elif kv["value"] == "GuestVictory":
-                            victor = "guest"
-                    elif kv["key"] == "host_score":
-                        hostScore = kv["value"]
-                    elif kv["key"] == "guest_score":
-                        guestScore = kv["value"]
-                if victor:
-                    if victor == "draw":
-                        print("This game has ended in a draw")
-
-                    print("This game has been won by the " + victor + ".")
-                    print("The host now has a cumulative score of " + hostScore)
-                    print("The guest now has a cumulative score of " + guestScore)
-                    self.gameOn = False
+    # eventReceived()

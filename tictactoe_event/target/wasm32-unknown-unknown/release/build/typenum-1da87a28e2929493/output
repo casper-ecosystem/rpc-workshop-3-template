@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/dylan/Desktop/CASPER/rpc-workshop-3/tictactoe_event/target/wasm32-unknown-unknown/release/build/typenum-1da87a28e2929493/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/Users/dylan/Desktop/CASPER/rpc-workshop-3/tictactoe_event/target/wasm32-unknown-unknown/release/build/typenum-1da87a28e2929493/out/op.rs

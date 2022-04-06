@@ -6,92 +6,15 @@ import time
 #MAIN GAME
 #---------
 
-def _main():
-	localClient = LocalClient(getIsHost(), getOpponentPublicKey()) #Build LocalClient from player-provided isHost and opponentPublicKeyHex
-	if localClient.gameStateEmpty(): printGuide() #If the game state is empty it's a new game and we print the guide
-
-	localClient.gameOn = True
-	while localClient.gameOn:
-		hostsTurn = localClient.hostsTurn()
-		if hostsTurn and not localClient.isHost: print("Waiting for host...")
-		elif not hostsTurn and localClient.isHost: print("Waiting for guest...")
-
-		if not pollForOurTurn(localClient): #Takes no time if it's our turn, waits otherwise. If returns False game is over
-			print("Do you want to play again?[Y|n]: ")
-			if getYn(): #If "y" then set gameOn == True and continue back
-				localClient.gameOn = True
-				continue
-		printBoard(localClient.gameState)
-		printMakeMove(localClient.isHost)
-
-		move = getMove() #Ask player for move-input
-		if move == None: exit(0) #Move will == None if user enters "q"
-		localClient.makeMove(move) #Make move
-		print("Waiting for execution...")
-		while not pollForOpponentsTurn(localClient): #Takes no time if it's the opponent's turn, waits otherwise. Returns false and opens the loop if the deploy fails
-			print("Deploy failed, please try again.")
-			move = getMove()
-			if move == None: exit(0)
-			localClient.makeMove(move)
-			print("Waiting for execution...")
-		if not localClient.gameOn:
-			print("Do you want to play again?[Y|n]: ")
-			localClient.gameOn = getYn() #If "y" then gameOn is True and the while loop continues, otherwise game ends
-	print("Thanks for playing!")
+# _main()
 
 #-------
 #POLLERS
 #-------
-""" DEPRECATED
-def pollDeployStatus(localClient, deployHash):
-	deployStatus = localClient.getMoveDeployStatus(deployHash)
-	while deployStatus.get("execution_results") == None:
-		time.sleep(2)
-	executionResults = deployStatus.get("execution_results")
-	while len(executionResults) == 0:
-		time.sleep(2)
-		executionResults = localClient.getMoveDeployStatus(deployHash).get("execution_results")
-	result = executionResults[0].get("result")
-	if result.get("Failure") != None:
-		return False
-	elif result.get("Success") != None:
-		return True
-	return None
-"""
 
-def pollForOurTurn(localClient):
-	while (not localClient.hostsTurn() if localClient.isHost else localClient.hostsTurn()): #If we're the host, run the loop while it's not their turn, and vice versa
-		if not localClient.gameOn: #Game has ended
-			return False
-		time.sleep(2)
-	return True
+# pollForOurTurn()
 
-def pollForOpponentsTurn(localClient):
-	while (localClient.hostsTurn() if localClient.isHost else not localClient.hostsTurn()): #If we're the host, run the loop while it's not their turn, and vice versa
-		if localClient.deployFailed:
-			localClient.deployFailed = None
-			return False
-		if not localClient.gameOn: #Game has ended
-			return True
-		time.sleep(2)
-	return True
-
-#-------
-#WAITERS
-#-------
-""" DEPRECATED
-def waitForGuest(localClient, hostsTurn):
-	while not hostsTurn:
-		time.sleep(2)
-		localClient.setGameState()
-		hostsTurn = localClient.hostsTurn()
-
-def waitForHost(localClient, hostsTurn):
-	while hostsTurn:
-		time.sleep(2)
-		localClient.setGameState()
-		hostsTurn = localClient.hostsTurn()
-"""
+# pollForOpponentsTurn()
 
 #--------
 #PRINTERS
