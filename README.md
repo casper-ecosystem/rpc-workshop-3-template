@@ -41,7 +41,7 @@ casper-client put-deploy \
     * Should call `get_events(callback, NodeEventChannel)` on a NodeClient instance.
 * `eventReceived(LocalClient, NodeEventInfo)`
     * Should parse `NodeEventInfo` object and react appropriately.
-* Note: See the methods with working functionality [here](https://github.com/casper-ecosystem/rpc-workshop-3/blob/main/localclient.py#L148)*
+* *Note: See the methods with working functionality [here](https://github.com/casper-ecosystem/rpc-workshop-3/blob/main/localclient.py#L148)*
 #### *game.py*
 * `_main()`
     * The main entry point of the game. Where the control flow of the game is executed.
