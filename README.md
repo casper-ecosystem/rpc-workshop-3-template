@@ -1,4 +1,4 @@
-## Ready Player Casper Workshop 3
+## Ready Player Casper Workshop 3 Template
 A game of tic-tac-toe playable by two different players via Casper smart contracts.
 Expanded to support emitting and subscribing to events.
 
