@@ -1,0 +1,1 @@
+/Users/dylan/Desktop/CASPER/rpc-workshop-3/tictactoe_event/target/wasm32-unknown-unknown/release/tictactoe.wasm: /Users/dylan/Desktop/CASPER/rpc-workshop-3/tictactoe_event/contract/src/event.rs /Users/dylan/Desktop/CASPER/rpc-workshop-3/tictactoe_event/contract/src/main.rs
